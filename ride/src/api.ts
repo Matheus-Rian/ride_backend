@@ -12,7 +12,7 @@ const pool = new Pool({
   port: 5433,
   user: 'root',
   password: 'root',
-  database: 'ridee',
+  database: 'ride',
 });
 
 app.post("/calculate_ride", (req, res) => {
