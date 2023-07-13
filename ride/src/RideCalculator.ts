@@ -19,8 +19,8 @@ export function calculate (segments) {
 	let price = 0;
 	for (const segment of segments) {
 		segment.date = new Date(segment.date);
-		if (!isValidDistance(segment)) return -1;
-		if (!isValidDate(segment)) return -2;
+		if (!isValidDistance(segment)) throw new Error("Invalid distance");;
+		if (!isValidDate(segment)) throw new Error("Invalid date");;
 		if (isOvernight(segment) && !isSunday(segment)) {
 			price += segment.distance * 3.90;
 		}

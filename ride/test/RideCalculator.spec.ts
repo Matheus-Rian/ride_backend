@@ -33,20 +33,18 @@ test("Deve fazer o cálculo do preço de uma corrida no domingo de noite", funct
 	expect(price).toBe(50);
 });
 
-test("Deve retornar -1 se a distância for inválida", function () {
+test("Deve retornar Error se a distância for inválida", function () {
 	const segments = [
 		{ distance: -10, date: new Date("2021-03-01T10:00:00") }
 	]
-	const price = calculate(segments);
-	expect(price).toBe(-1);
+	expect(() => calculate(segments)).toThrow(new Error("Invalid distance"));
 });
 
-test("Deve retornar -2 se a data for inválida", function () {
+test("Deve retornar Error se a data for inválida", function () {
 	const segments = [
 		{ distance: 10, date: new Date("javascript") }
 	]
-	const price = calculate(segments);
-	expect(price).toBe(-2);
+	expect(() => calculate(segments)).toThrow(new Error("Invalid date"));
 });
 
 test("Deve fazer o cálculo do preço de uma corrida durante o dia com preço mínimo", function () {

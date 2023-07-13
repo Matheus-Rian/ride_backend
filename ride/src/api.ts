@@ -3,6 +3,7 @@ import Ride from "./Ride";
 import crypto from 'crypto';
 import { Pool } from 'pg';
 import { isValidCpf } from "./CpfValidator";
+import { calculate } from "./RideCalculator";
 
 const app = express();
 app.use(express.json());
@@ -17,11 +18,11 @@ const pool = new Pool({
 
 app.post("/calculate_ride", (req, res) => {
 	try {
-		const ride = new Ride();
-		for (const segment of req.body.segments) {
-			ride.addSegment(segment.distance, new Date(segment.date));
-		}
-		const price = ride.calculate();
+		// const ride = new Ride();
+		// for (const segment of req.body.segments) {
+		// 	ride.addSegment(segment.distance, new Date(segment.date));
+		// }
+		const price = calculate(req.body.segments);
 		res.json({ price });
 	} catch (e: any) {
 		res.status(422).send(e.message);
