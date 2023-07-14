@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { Pool } from 'pg';
 import { isValidCpf } from "./CpfValidator";
 import { calculate } from "./RideCalculator";
+import { CalculateRide } from "./application/usecase/CalculateRide";
 
 const app = express();
 app.use(express.json());
@@ -16,14 +17,11 @@ const pool = new Pool({
   database: 'ride',
 });
 
-app.post("/calculate_ride", (req, res) => {
+app.post("/calculate_ride", async (req, res) => {
 	try {
-		// const ride = new Ride();
-		// for (const segment of req.body.segments) {
-		// 	ride.addSegment(segment.distance, new Date(segment.date));
-		// }
-		const price = calculate(req.body.segments);
-		res.json({ price });
+		const usecase = new CalculateRide();
+		const output = await usecase.execute(req.body);
+		res.json(output);
 	} catch (e: any) {
 		res.status(422).send(e.message);
 	}
