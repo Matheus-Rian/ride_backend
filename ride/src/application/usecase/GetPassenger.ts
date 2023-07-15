@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { UUID } from "./models/uuid";
+import { PassengerRepository } from "../repository/PassengerRepository";
 
 const pool = new Pool({
   host: '0.0.0.0',
@@ -10,21 +11,15 @@ const pool = new Pool({
 });
 
 export class GetPassenger {
-  constructor () {}
+  constructor (readonly passengerRepository: PassengerRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const client = await pool.connect();
-    const { rows } = await client.query(
-      "SELECT * FROM cccat12.passenger WHERE passenger_id = $1",
-      [input.passengerId]
-    );
-    
-    client.release();
+    const passengerData = await this.passengerRepository.get(input.passengerId);
     return {
-      passengerId: rows[0].passenger_id,
-      name: rows[0].name,
-      email: rows[0].email,
-      document: rows[0].document
+      passengerId: passengerData[0].passenger_id,
+      name: passengerData[0].name,
+      email: passengerData[0].email,
+      document: passengerData[0].document
     };
   }
 }

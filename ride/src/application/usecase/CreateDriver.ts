@@ -2,6 +2,7 @@ import { Pool } from "pg";
 import { isValidCpf } from "../../CpfValidator";
 import crypto from 'crypto';
 import { UUID } from "./models/uuid";
+import { DriverRepository } from "../repository/DriverRepository";
 
 const pool = new Pool({
   host: '0.0.0.0',
@@ -12,18 +13,12 @@ const pool = new Pool({
 });
 
 export class CreateDriver {
-  constructor () {}
+  constructor (readonly driverRepository: DriverRepository) {}
 
   async execute(input: Input): Promise<Output> {
-	  const client = await pool.connect();
     const driverId = crypto.randomUUID();
 		if (!isValidCpf(input.document)) throw new Error('Invalid Cpf.')
-		const query = 'INSERT INTO cccat12.driver (driver_id, name, email, document, car_plate) VALUES ($1, $2, $3, $4, $5)';
-		const values = [driverId, input.name, input.email, input.document, input.carPlate];
-	
-		await client.query(query, values);
-	
-    client.release();	
+    await this.driverRepository.save(Object.assign(input, { driverId }));
 	
 		return {
 			driverId

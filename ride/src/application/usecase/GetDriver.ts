@@ -1,32 +1,17 @@
-import { Pool } from "pg";
+import { DriverRepository } from "../repository/DriverRepository";
 import { UUID } from "./models/uuid";
 
-const pool = new Pool({
-  host: '0.0.0.0',
-  port: 5433,
-  user: 'root',
-  password: 'root',
-  database: 'ride',
-});
-
 export class GetDriver {
-  constructor () {}
+  constructor (readonly driverRepository: DriverRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const client = await pool.connect();
-    const { rows } = await client.query(
-      "SELECT * FROM cccat12.driver WHERE driver_id = $1",
-      [input.driverId]
-    );
-    
-    client.release();
-
+    const driverData = await this.driverRepository.get(input.driverId);
     return {
-      driverId: rows[0].driver_id,
-      name: rows[0].name,
-      email: rows[0].email,
-      document: rows[0].document,
-      carPlate: rows[0].car_plate
+      driverId: driverData[0].driver_id,
+      name: driverData[0].name,
+      email: driverData[0].email,
+      document: driverData[0].document,
+      carPlate: driverData[0].car_plate
     };
   
   }
