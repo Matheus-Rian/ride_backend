@@ -1,4 +1,4 @@
-import Cpf from "../src/CpfValidatorPOO";
+import Cpf from "../../src/domain/Cpf";
 
 describe('CPF', () => {
   // All tests have three points: given, when, then
