@@ -1,5 +1,6 @@
 import { CreatePassenger } from "../../src/application/usecase/CreatePassenger";
 import { GetPassenger } from "../../src/application/usecase/GetPassenger";
+import PassengerRepositoryDatabase from "../../src/infra/repository/PassengerRepositoryDatabase";
 
 test("Should signup Passenger", async () => {
 	// given
@@ -9,7 +10,7 @@ test("Should signup Passenger", async () => {
 		document: '625.332.890-51'
 	};
 	// when
-	const usecase = new CreatePassenger();
+	const usecase = new CreatePassenger(new PassengerRepositoryDatabase());
 	const output = await usecase.execute(input);
 	// then
 	expect(output.passengerId).toBeDefined();
@@ -23,9 +24,9 @@ test('Should get Passanger', async () => {
 		document: '625.332.890-51'
 	};
 	// when
-  const usecase1 = new CreatePassenger();
+  const usecase1 = new CreatePassenger(new PassengerRepositoryDatabase());
 	const output1 = await usecase1.execute(input);
-  const usecase2 = new GetPassenger();
+  const usecase2 = new GetPassenger(new PassengerRepositoryDatabase());
 	const output2 = await usecase2.execute({ passengerId: output1.passengerId });
 	// then
 	expect(output2.name).toBe('John Doe');
