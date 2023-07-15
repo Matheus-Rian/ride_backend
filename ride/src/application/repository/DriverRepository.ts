@@ -1,4 +1,7 @@
+import Driver from "../../domain/Driver"
+import { UUID } from "../usecase/models/uuid"
+
 export interface DriverRepository {
-  save(driver: any): Promise<void>
-  get(driverId: any): Promise<any>
+  save(driver: Driver): Promise<void>
+  get(driverId: UUID): Promise<Driver>
 }
