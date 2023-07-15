@@ -86,7 +86,7 @@ test("Should signup Driver", async () => {
 		name: 'John Doe',
 		email: 'john.doe@gmail.com',
 		document: '625.332.890-51',
-		carPlate: 'AAA999'
+		carPlate: 'AAA9999'
 	};
 	// when
 	const response = await axios.post("http://localhost:3000/drivers", input);
@@ -101,7 +101,7 @@ test('Should get Driver', async () => {
 		name: 'John Doe',
 		email: 'john.doe@gmail.com',
 		document: '625.332.890-51',
-		carPlate: 'AAA999'
+		carPlate: 'AAA9999'
 	};
 	// when
 	const response1 = await axios.post("http://localhost:3000/drivers", input);
@@ -112,5 +112,5 @@ test('Should get Driver', async () => {
 	expect(output2.name).toBe('John Doe');
 	expect(output2.email).toBe('john.doe@gmail.com');
 	expect(output2.document).toBe('625.332.890-51');
-	expect(output2.carPlate).toBe('AAA999');
+	expect(output2.carPlate).toBe('AAA9999');
 });

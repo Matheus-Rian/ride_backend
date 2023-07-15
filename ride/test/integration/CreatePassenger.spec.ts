@@ -16,6 +16,19 @@ test("Should signup Passenger", async () => {
 	expect(output.passengerId).toBeDefined();
 });
 
+test("Should throw Error when email Passenger is invalid", async () => {
+	// given
+	const input = {
+		name: 'John Doe',
+		email: 'john.doe@gmail',
+		document: '625.332.890-51'
+	};
+	// when
+	const usecase = new CreatePassenger(new PassengerRepositoryDatabase());
+	// then
+	await expect(() => usecase.execute(input)).rejects.toThrow(new Error('Invalid Email.'));
+});
+
 test('Should get Passanger', async () => {
 	// given
 	const input = {

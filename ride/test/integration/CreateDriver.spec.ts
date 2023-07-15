@@ -1,6 +1,8 @@
 import { DriverRepository } from "../../src/application/repository/DriverRepository";
 import { CreateDriver } from "../../src/application/usecase/CreateDriver";
 import { GetDriver } from "../../src/application/usecase/GetDriver";
+import { UUID } from "../../src/application/usecase/models/uuid";
+import Driver from "../../src/domain/Driver";
 import DriverRepositoryDatabase from "../../src/infra/repository/DriverRepositoryDatabase";
 
 // broad integration test
@@ -10,7 +12,7 @@ test("Should signup Driver", async () => {
 		name: 'John Doe',
 		email: 'john.doe@gmail.com',
 		document: '625.332.890-51',
-		carPlate: 'AAA999'
+		carPlate: 'AAA9999'
 	};
 	// when
   const usecase = new CreateDriver(new DriverRepositoryDatabase());
@@ -22,16 +24,16 @@ test("Should signup Driver", async () => {
 // narrow integration test
 test('Should get Driver', async () => {
 	const driverRepository: DriverRepository = {
-		async save (driver: any): Promise<void> {
+		async save (driver: Driver): Promise<void> {
 		},
-		async get (driverId: any): Promise<any> {
-			return [{
-				driver_id: '',
-				name: 'John Doe',
-				email: 'john.doe@gmail.com',
-				document: '625.332.890-51',
-				car_plate: 'AAA999'
-			}]
+		async get (driverId: UUID): Promise<Driver> {
+			return new Driver(
+				'' as UUID,
+				'John Doe',
+				'john.doe@gmail.com',
+				'625.332.890-51',
+				'AAA9999'
+			);
 		}
 	}
 
@@ -40,7 +42,7 @@ test('Should get Driver', async () => {
 		name: 'John Doe',
 		email: 'john.doe@gmail.com',
 		document: '625.332.890-51',
-		carPlate: 'AAA999'
+		carPlate: 'AAA9999'
 	};
 	// when
   const usecase1 = new CreateDriver(driverRepository);
@@ -51,7 +53,7 @@ test('Should get Driver', async () => {
 	expect(output2.name).toBe('John Doe');
 	expect(output2.email).toBe('john.doe@gmail.com');
 	expect(output2.document).toBe('625.332.890-51');
-	expect(output2.carPlate).toBe('AAA999');
+	expect(output2.carPlate).toBe('AAA9999');
 });
 
 // broad integration test
@@ -61,7 +63,7 @@ test('Should get Driver', async () => {
 		name: 'John Doe',
 		email: 'john.doe@gmail.com',
 		document: '625.332.890-51',
-		carPlate: 'AAA999'
+		carPlate: 'AAA9999'
 	};
 	// when
   const usecase1 = new CreateDriver(new DriverRepositoryDatabase());
@@ -72,5 +74,5 @@ test('Should get Driver', async () => {
 	expect(output2.name).toBe('John Doe');
 	expect(output2.email).toBe('john.doe@gmail.com');
 	expect(output2.document).toBe('625.332.890-51');
-	expect(output2.carPlate).toBe('AAA999');
+	expect(output2.carPlate).toBe('AAA9999');
 });
