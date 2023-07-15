@@ -1,8 +1,7 @@
 import { Pool } from "pg";
-import { isValidCpf } from "../../CpfValidator";
-import crypto from 'crypto';
 import { UUID } from "./models/uuid";
 import { DriverRepository } from "../repository/DriverRepository";
+import Driver from "../../domain/Driver";
 
 const pool = new Pool({
   host: '0.0.0.0',
@@ -16,12 +15,11 @@ export class CreateDriver {
   constructor (readonly driverRepository: DriverRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const driverId = crypto.randomUUID();
-		if (!isValidCpf(input.document)) throw new Error('Invalid Cpf.')
-    await this.driverRepository.save(Object.assign(input, { driverId }));
+    const driver = Driver.create(input.name, input.email, input.document, input.carPlate);
+    await this.driverRepository.save(driver);
 	
 		return {
-			driverId
+			driverId: driver.driverId
 		};
   }
 }

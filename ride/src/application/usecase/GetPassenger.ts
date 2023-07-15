@@ -14,12 +14,12 @@ export class GetPassenger {
   constructor (readonly passengerRepository: PassengerRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const passengerData = await this.passengerRepository.get(input.passengerId);
+    const passenger = await this.passengerRepository.get(input.passengerId);
     return {
-      passengerId: passengerData[0].passenger_id,
-      name: passengerData[0].name,
-      email: passengerData[0].email,
-      document: passengerData[0].document
+      passengerId: passenger.passengerId,
+      name: passenger.name,
+      email: passenger.email.value,
+      document: passenger.document.value
     };
   }
 }
