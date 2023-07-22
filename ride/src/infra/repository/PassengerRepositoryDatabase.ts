@@ -1,36 +1,24 @@
-import { Pool } from "pg";
 import { PassengerRepository } from "../../application/repository/PassengerRepository";
 import { UUID } from "../../application/usecase/models/uuid";
 import Passenger from "../../domain/Passenger";
-
-const pool = new Pool({
-  host: '0.0.0.0',
-  port: 5433,
-  user: 'root',
-  password: 'root',
-  database: 'ride',
-});
+import DatabaseConnection from "../database/DatabaseConnection";
 
 export default class PassengerRepositoryDatabase implements PassengerRepository {
-  constructor () {}
+  constructor (readonly connection: DatabaseConnection) {}
 
   async save(passenger: Passenger) {
-    const client = await pool.connect();
     const query = 'INSERT INTO cccat12.passenger (passenger_id, name, email, document) VALUES ($1, $2, $3, $4)';
 		const values = [passenger.passengerId, passenger.name, passenger.email.value, passenger.document.value];
 	
-		await client.query(query, values);
-		client.release();	
+		await this.connection.query(query, values);
   }
 
   async get(passengerId: UUID): Promise<Passenger> {
-    const client = await pool.connect();
-    const { rows: passengerData } = await client.query(
+    const { rows: passengerData } = await this.connection.query(
       "SELECT * FROM cccat12.passenger WHERE passenger_id = $1",
       [passengerId]
     );
     
-    client.release();
     return new Passenger(
       passengerData[0].passenger_id,
       passengerData[0].name,
