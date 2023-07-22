@@ -7,9 +7,11 @@ import { UUID } from "./application/usecase/models/uuid";
 import { GetDriver } from "./application/usecase/GetDriver";
 import DriverRepositoryDatabase from "./infra/repository/DriverRepositoryDatabase";
 import PassengerRepositoryDatabase from "./infra/repository/PassengerRepositoryDatabase";
+import PgaAdapter from "./infra/database/PgAdapter";
 
 const app = express();
 app.use(express.json());
+const connection = new PgaAdapter();
 
 app.post("/calculate_ride", async (req, res) => {
 	try {
@@ -23,7 +25,7 @@ app.post("/calculate_ride", async (req, res) => {
 
 app.post('/passengers', async (req, res) => {
 	try {
-		const usecase = new CreatePassenger(new PassengerRepositoryDatabase());
+		const usecase = new CreatePassenger(new PassengerRepositoryDatabase(connection));
 		const output = await usecase.execute(req.body);
 		res.json(output);
 	} catch (e: any) {
@@ -32,14 +34,14 @@ app.post('/passengers', async (req, res) => {
 });
 
 app.get('/passengers/:passengerId', async (req, res) => {
-	const usecase = new GetPassenger(new PassengerRepositoryDatabase());
+	const usecase = new GetPassenger(new PassengerRepositoryDatabase(connection));
 	const output = await usecase.execute({ passengerId: req.params.passengerId as UUID });
 	res.json(output);
 });
 
 app.post('/drivers', async (req, res) => {
 	try {
-		const usecase = new CreateDriver(new DriverRepositoryDatabase());
+		const usecase = new CreateDriver(new DriverRepositoryDatabase(connection));
 		const output = await usecase.execute(req.body);
 		res.json(output);
 	} catch (e: any) {
@@ -48,7 +50,7 @@ app.post('/drivers', async (req, res) => {
 });
 
 app.get('/drivers/:driverId', async (req, res) => {
-	const usecase = new GetDriver(new DriverRepositoryDatabase());
+	const usecase = new GetDriver(new DriverRepositoryDatabase(connection));
 	const output = await usecase.execute({ driverId: req.params.driverId as UUID });
 	res.json(output);
 });

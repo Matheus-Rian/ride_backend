@@ -3,6 +3,7 @@ import { CreateDriver } from "../../src/application/usecase/CreateDriver";
 import { GetDriver } from "../../src/application/usecase/GetDriver";
 import { UUID } from "../../src/application/usecase/models/uuid";
 import Driver from "../../src/domain/Driver";
+import PgaAdapter from "../../src/infra/database/PgAdapter";
 import DriverRepositoryDatabase from "../../src/infra/repository/DriverRepositoryDatabase";
 
 // broad integration test
@@ -15,10 +16,12 @@ test("Should signup Driver", async () => {
 		carPlate: 'AAA9999'
 	};
 	// when
-  const usecase = new CreateDriver(new DriverRepositoryDatabase());
+	const connection = new PgaAdapter();
+  const usecase = new CreateDriver(new DriverRepositoryDatabase(connection));
   const output = await usecase.execute(input);
 	// then
 	expect(output.driverId).toBeDefined();
+	await connection.close();
 });
 
 // narrow integration test
@@ -66,13 +69,15 @@ test('Should get Driver', async () => {
 		carPlate: 'AAA9999'
 	};
 	// when
-  const usecase1 = new CreateDriver(new DriverRepositoryDatabase());
+	const connection = new PgaAdapter();
+  const usecase1 = new CreateDriver(new DriverRepositoryDatabase(connection));
   const output1 = await usecase1.execute(input);
-	const usecase2 = new GetDriver(new DriverRepositoryDatabase());
+	const usecase2 = new GetDriver(new DriverRepositoryDatabase(connection));
   const output2 = await usecase2.execute(output1);
 	// then
 	expect(output2.name).toBe('John Doe');
 	expect(output2.email).toBe('john.doe@gmail.com');
 	expect(output2.document).toBe('625.332.890-51');
 	expect(output2.carPlate).toBe('AAA9999');
+	await connection.close();
 });
