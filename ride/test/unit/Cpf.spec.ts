@@ -1,4 +1,4 @@
-import Cpf from "../../src/domain/Cpf";
+import Cpf from "../../src/domain/person/Cpf";
 
 describe('CPF', () => {
   // All tests have three points: given, when, then

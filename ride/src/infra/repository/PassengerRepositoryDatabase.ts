@@ -1,6 +1,6 @@
 import { PassengerRepository } from "../../application/repository/PassengerRepository";
 import { UUID } from "../../application/usecase/models/uuid";
-import Passenger from "../../domain/Passenger";
+import Passenger from "../../domain/passenger/Passenger";
 import DatabaseConnection from "../database/DatabaseConnection";
 
 export default class PassengerRepositoryDatabase implements PassengerRepository {

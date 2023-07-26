@@ -1,8 +1,8 @@
-import { UUID } from "../application/usecase/models/uuid";
+import { UUID } from "../../application/usecase/models/uuid";
 import CarPlate from "./CarPlate";
-import Cpf from "./Cpf";
-import Email from "./Email";
-import UUIDGenerator from "./UUIDGenerator";
+import Cpf from "../person/Cpf";
+import Email from "../person/Email";
+import UUIDGenerator from "../identity/UUIDGenerator";
 
 export default class Driver {
   document: Cpf;

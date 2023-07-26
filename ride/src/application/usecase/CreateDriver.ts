@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { UUID } from "./models/uuid";
 import { DriverRepository } from "../repository/DriverRepository";
-import Driver from "../../domain/Driver";
+import Driver from "../../domain/driver/Driver";
 
 const pool = new Pool({
   host: '0.0.0.0',

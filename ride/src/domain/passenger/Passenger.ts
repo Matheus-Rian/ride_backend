@@ -1,8 +1,8 @@
 import crypto from 'crypto';
-import Cpf from './Cpf';
-import Email from './Email';
-import UUIDGenerator from './UUIDGenerator';
-import { UUID } from '../application/usecase/models/uuid';
+import Cpf from '../person/Cpf';
+import Email from '../person/Email';
+import UUIDGenerator from '../identity/UUIDGenerator';
+import { UUID } from '../../application/usecase/models/uuid';
 
 export default class Passenger {
   document: Cpf;

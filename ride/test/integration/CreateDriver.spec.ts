@@ -2,7 +2,7 @@ import { DriverRepository } from "../../src/application/repository/DriverReposit
 import { CreateDriver } from "../../src/application/usecase/CreateDriver";
 import { GetDriver } from "../../src/application/usecase/GetDriver";
 import { UUID } from "../../src/application/usecase/models/uuid";
-import Driver from "../../src/domain/Driver";
+import Driver from "../../src/domain/driver/Driver";
 import PgaAdapter from "../../src/infra/database/PgAdapter";
 import DriverRepositoryDatabase from "../../src/infra/repository/DriverRepositoryDatabase";
 

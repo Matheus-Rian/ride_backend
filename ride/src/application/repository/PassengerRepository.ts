@@ -1,4 +1,4 @@
-import Passenger from "../../domain/Passenger"
+import Passenger from "../../domain/passenger/Passenger"
 import { UUID } from "../usecase/models/uuid"
 
 export interface PassengerRepository {

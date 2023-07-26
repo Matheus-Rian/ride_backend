@@ -1,4 +1,4 @@
-import CarPlate from "../../src/domain/CarPlate"
+import CarPlate from "../../src/domain/driver/CarPlate"
 
 test('Should return TRUE when valid carPlate', () => {
   // given and when

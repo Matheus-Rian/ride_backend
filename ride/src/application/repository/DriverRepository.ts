@@ -1,4 +1,4 @@
-import Driver from "../../domain/Driver"
+import Driver from "../../domain/driver/Driver"
 import { UUID } from "../usecase/models/uuid"
 
 export interface DriverRepository {

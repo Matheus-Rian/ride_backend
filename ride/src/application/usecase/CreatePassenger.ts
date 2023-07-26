@@ -1,6 +1,6 @@
 import { UUID } from "./models/uuid";
 import { PassengerRepository } from "../repository/PassengerRepository";
-import Passenger from "../../domain/Passenger";
+import Passenger from "../../domain/passenger/Passenger";
 
 export class CreatePassenger {
   constructor (readonly passengerRepository: PassengerRepository) {}

@@ -1,4 +1,4 @@
-import Email from "../../src/domain/Email";
+import Email from "../../src/domain/person/Email";
 
 test('Should return TRUE when email valid', () => {
   // given and when
