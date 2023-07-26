@@ -1,7 +1,9 @@
+import DistanceCalculator from './DistanceCalculator';
+import Position from './Position';
 import Segment from './Segment';
 
 export default class Ride {
-	segments: Segment[];
+	positions: Position[];
 	OVERNIGHT_FARE = 3.90;
 	OVERNIGHT_SUNDAY_FARE = 5;
 	SUNDAY_FARE = 2.9;
@@ -9,16 +11,20 @@ export default class Ride {
 	MIN_PRICE = 10;
 
 	constructor () {
-		this.segments = [];
+		this.positions = [];
 	}
 
-	addSegment (distance: number, date: Date) {
-		this.segments.push(new Segment(distance, date));
+	addPosition(lat: number, long: number, date: Date) {
+		this.positions.push(new Position(lat, long, date));
 	}
 
 	calculate () {
 		let price = 0;
-		for (const segment of this.segments) {
+		for (const [index, position] of this.positions.entries()) {
+			const nextPosition = this.positions[index + 1];
+			if (!nextPosition) break;
+			const distance = DistanceCalculator.calculate(position.coord, nextPosition.coord);
+			const segment = new Segment(distance, nextPosition.date);
 			if (segment.isOvernight() && !segment.isSunday()) {
 				price += segment.distance * this.OVERNIGHT_FARE;
 			}
