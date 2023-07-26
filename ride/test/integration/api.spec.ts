@@ -6,11 +6,12 @@ axios.defaults.validateStatus = function () {
 
 test("Deve fazer o cálculo do preço de uma corrida durante o dia", async function () {
 	// given
-	const input = {
-		segments: [
-			{ distance: 10, date: "2021-03-01T10:00:00" }
-		]
-	};
+  const input = {
+    positions: [
+      { lat: -8.087602480277932, long: -34.94039886110192, date: new Date("2021-03-01T10:00:00") },
+      { lat: -7.998906652322922, long: -34.97156026714327, date: new Date("2021-03-01T10:00:00") },
+    ]
+  };
 	// when
 	const response = await axios.post("http://localhost:3000/calculate_ride", input);
 	const output = response.data;
@@ -18,19 +19,20 @@ test("Deve fazer o cálculo do preço de uma corrida durante o dia", async funct
 	expect(output.price).toBe(21);
 });
 
-test("Se a distância for inválida deve lançar um erro", async function () {
+test("Se a data for inválida deve lançar um erro", async function () {
 	// given
-	const input = {
-		segments: [
-			{ distance: -10, date: "2021-03-01T10:00:00" }
-		]
-	};
+  const input = {
+    positions: [
+      { lat: -8.087602480277932, long: -34.94039886110192, date: "JavaScript" },
+      { lat: -7.998906652322922, long: -34.97156026714327, date: "JavaScript" },
+    ]
+  };
 	// when
 	const response = await axios.post("http://localhost:3000/calculate_ride", input);
 	const output = response.data;
 	// then
 	expect(response.status).toBe(422);
-	expect(output).toBe("Invalid distance");
+	expect(output).toBe("Invalid date");
 });
 
 test("Should signup Passenger", async () => {
