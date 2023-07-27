@@ -5,7 +5,6 @@ import NormalFareCalculatorHandler from '../fare/chain_of_responsability/NormalF
 import OvernightFareCalculatorHandler from '../fare/chain_of_responsability/OvernightFareCalculatorHandler';
 import OvernightSundayFareCalculatorHandler from '../fare/chain_of_responsability/OvernightSundayFareCalculatorHandler';
 import SundayFareCalculatorHandler from '../fare/chain_of_responsability/SundayFareCalculatorHandler';
-import FareCalculatorFactory from '../fare/strategy/FareCalculatorFactory';
 import UUIDGenerator from '../identity/UUIDGenerator';
 import Position from './Position';
 import Segment from './Segment';
@@ -14,13 +13,15 @@ export default class Ride {
 	positions: Position[];
 	MIN_PRICE = 10;
 	fareCalculator: FareCalculatorHandler;
+	driverId?: string;
+	acceptDate?: Date;
 
 	constructor (
 		readonly rideId: string, 
 		readonly passengerId: string, 
 		readonly from: Coord, 
 		readonly to: Coord,
-		readonly status: string,
+		public status: string,
 		readonly requestDate: Date
 	) {
 		this.positions = [];
@@ -44,6 +45,12 @@ export default class Ride {
 			price += this.fareCalculator.handle(segment);
 		}
 		return (price < this.MIN_PRICE) ? this.MIN_PRICE : price;
+	}
+
+	accept(driverId: string, date: Date) {
+		this.driverId = driverId;
+		this.status = 'accepted';
+		this.acceptDate = date;
 	}
 
 	static create(passengerId: string, from: Coord, to: Coord, requestDate: Date = new Date()) {

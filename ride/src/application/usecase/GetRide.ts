@@ -7,8 +7,10 @@ export default class GetRide {
     const ride = await this.rideRepository.get(input.rideId);
     return {
       rideId: ride.rideId,
+      driverId: ride.driverId,
       status: ride.status,
-      requestDate: ride.requestDate
+      requestDate: ride.requestDate,
+      acceptDate: ride.acceptDate,
     }
   }
 }
@@ -19,6 +21,8 @@ type Input = {
 
 type Output = {
   rideId: string
+  driverId?: string
   status: string
   requestDate: Date
+  acceptDate?: Date
 }
