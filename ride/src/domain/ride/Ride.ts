@@ -1,3 +1,4 @@
+import Coord from '../distance/Coord';
 import DistanceCalculator from '../distance/DistanceCalculator';
 import FareCalculatorHandler from '../fare/chain_of_responsability/FareCalculatorHandler';
 import NormalFareCalculatorHandler from '../fare/chain_of_responsability/NormalFareCalculatorHandler';
@@ -5,6 +6,7 @@ import OvernightFareCalculatorHandler from '../fare/chain_of_responsability/Over
 import OvernightSundayFareCalculatorHandler from '../fare/chain_of_responsability/OvernightSundayFareCalculatorHandler';
 import SundayFareCalculatorHandler from '../fare/chain_of_responsability/SundayFareCalculatorHandler';
 import FareCalculatorFactory from '../fare/strategy/FareCalculatorFactory';
+import UUIDGenerator from '../identity/UUIDGenerator';
 import Position from './Position';
 import Segment from './Segment';
 
@@ -13,7 +15,14 @@ export default class Ride {
 	MIN_PRICE = 10;
 	fareCalculator: FareCalculatorHandler;
 
-	constructor () {
+	constructor (
+		readonly rideId: string, 
+		readonly passengerId: string, 
+		readonly from: Coord, 
+		readonly to: Coord,
+		readonly status: string,
+		readonly requestDate: Date
+	) {
 		this.positions = [];
 		const overnightSundayFireCalculator = new OvernightSundayFareCalculatorHandler();
 		const sundayFireCalculator = new SundayFareCalculatorHandler(overnightSundayFireCalculator);
@@ -25,7 +34,7 @@ export default class Ride {
 		this.positions.push(new Position(lat, long, date));
 	}
 
-	calculate () {
+	calculate() {
 		let price = 0;
 		for (const [index, position] of this.positions.entries()) {
 			const nextPosition = this.positions[index + 1];
@@ -33,9 +42,13 @@ export default class Ride {
 			const distance = DistanceCalculator.calculate(position.coord, nextPosition.coord);
 			const segment = new Segment(distance, nextPosition.date);
 			price += this.fareCalculator.handle(segment);
-			// const fareCalculator = FareCalculatorFactory.create(segment);
-			// price += fareCalculator.calculate(segment);
 		}
 		return (price < this.MIN_PRICE) ? this.MIN_PRICE : price;
+	}
+
+	static create(passengerId: string, from: Coord, to: Coord, requestDate: Date = new Date()) {
+		const rideId = UUIDGenerator.create();
+		const status = 'requested';
+		return new Ride(rideId, passengerId, from, to, status, requestDate);
 	}
 }

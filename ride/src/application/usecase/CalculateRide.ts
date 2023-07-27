@@ -1,10 +1,11 @@
+import Coord from "../../domain/distance/Coord";
 import Ride from "../../domain/ride/Ride"
 
 export class CalculateRide {
   constructor () {}
 
   async execute(input: Input): Promise<Output> {
-    const ride = new Ride();
+    const ride = Ride.create('', new Coord(0,0), new Coord(0,0));
     for (const position of input.positions) {
       ride.addPosition(position.lat, position.long, new Date(position.date));
     }
