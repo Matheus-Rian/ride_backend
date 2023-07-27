@@ -16,6 +16,7 @@ export default class Ride {
 	driverId?: string;
 	acceptDate?: Date;
 	startDate?: Date;
+	endDate?: Date;
 
 	constructor (
 		readonly rideId: string, 
@@ -57,6 +58,11 @@ export default class Ride {
 	start(date: Date) {
 		this.status = 'in_progress';
 		this.startDate = date;
+	}
+
+	end(date: Date) {
+		this.status = 'completed';
+		this.endDate = date;
 	}
 
 	static create(passengerId: string, from: Coord, to: Coord, requestDate: Date = new Date()) {
