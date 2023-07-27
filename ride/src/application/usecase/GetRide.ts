@@ -11,6 +11,7 @@ export default class GetRide {
       status: ride.status,
       requestDate: ride.requestDate,
       acceptDate: ride.acceptDate,
+      startDate: ride.startDate
     }
   }
 }
@@ -25,4 +26,5 @@ type Output = {
   status: string
   requestDate: Date
   acceptDate?: Date
+  startDate?: Date
 }

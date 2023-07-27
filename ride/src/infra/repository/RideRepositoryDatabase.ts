@@ -24,11 +24,12 @@ export default class RideRepositoryDatabase implements RideRepository {
     );
     ride.driverId = rideData[0].driver_id;
     ride.acceptDate = rideData[0].accept_date;
+    ride.startDate = rideData[0].start_date;
     return ride;
   }
 
   async update(ride: Ride): Promise<void> {
-    await this.connection.query('update cccat12.ride set driver_id = $1, status = $2, accept_date = $3 where ride_id = $4',
-    [ride.driverId, ride.status, ride.acceptDate, ride.rideId]);
+    await this.connection.query('update cccat12.ride set driver_id = $1, status = $2, accept_date = $3, start_date = $4 where ride_id = $5',
+    [ride.driverId, ride.status, ride.acceptDate, ride.startDate, ride.rideId]);
   }
 }
