@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import { Pool, PoolClient } from "pg";
 import DatabaseConnection from "./DatabaseConnection";
 
 // Frameworks and Drivers
@@ -16,10 +16,14 @@ export default class PgaAdapter implements DatabaseConnection {
 
   async query(statement: string, params: any): Promise<any> {
     const client = await this.connection.connect();
-    return client.query(statement, params);
+    const result = await client.query(statement, params);
+    this.close(client);
+    return result;
   }
-  async close(): Promise<void> {
-    const client = await this.connection.connect();
-    client.release();
+  async close(clientPool: PoolClient | null = null): Promise<void> {
+    if (!clientPool)
+      return;
+
+    clientPool.release();
   }
 }
