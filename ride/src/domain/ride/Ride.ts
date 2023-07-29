@@ -8,6 +8,8 @@ import SundayFareCalculatorHandler from '../fare/chain_of_responsability/SundayF
 import UUIDGenerator from '../identity/UUIDGenerator';
 import Position from './Position';
 import Segment from './Segment';
+import RideStatus from './status/RideStatus';
+import RideStatusFactory from './status/RideStatusFactory';
 
 export default class Ride {
 	positions: Position[];
@@ -17,13 +19,14 @@ export default class Ride {
 	acceptDate?: Date;
 	startDate?: Date;
 	endDate?: Date;
+	status: RideStatus;
 
 	constructor (
 		readonly rideId: string, 
 		readonly passengerId: string, 
 		readonly from: Coord, 
 		readonly to: Coord,
-		public status: string,
+		status: string,
 		readonly requestDate: Date
 	) {
 		this.positions = [];
@@ -31,6 +34,7 @@ export default class Ride {
 		const sundayFireCalculator = new SundayFareCalculatorHandler(overnightSundayFireCalculator);
 		const overnightFireCalculator = new OvernightFareCalculatorHandler(sundayFireCalculator);
 		this.fareCalculator = new NormalFareCalculatorHandler(overnightFireCalculator);
+		this.status = RideStatusFactory.create(this, status);
 	}
 
 	addPosition(lat: number, long: number, date: Date) {
@@ -51,17 +55,17 @@ export default class Ride {
 
 	accept(driverId: string, date: Date) {
 		this.driverId = driverId;
-		this.status = 'accepted';
+		this.status.accept();
 		this.acceptDate = date;
 	}
 
 	start(date: Date) {
-		this.status = 'in_progress';
+		this.status.start();
 		this.startDate = date;
 	}
 
 	end(date: Date) {
-		this.status = 'completed';
+		this.status.end();
 		this.endDate = date;
 	}
 

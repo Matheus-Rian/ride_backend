@@ -9,7 +9,7 @@ export default class RideRepositoryDatabase implements RideRepository {
   async save(ride: Ride): Promise<void> {
     await this.connection.query(
       "insert into cccat12.ride (ride_id, passenger_id, from_lat, from_long, to_lat, to_long, status, request_date) values ($1, $2, $3, $4, $5, $6, $7, $8)",
-      [ride.rideId, ride.passengerId, ride.from.lat, ride.from.long, ride.to.lat, ride.to.long, ride.status, ride.requestDate]
+      [ride.rideId, ride.passengerId, ride.from.lat, ride.from.long, ride.to.lat, ride.to.long, ride.status.value, ride.requestDate]
     );
   }
   async get(rideId: string): Promise<Ride> {
@@ -31,6 +31,6 @@ export default class RideRepositoryDatabase implements RideRepository {
 
   async update(ride: Ride): Promise<void> {
     await this.connection.query('update cccat12.ride set driver_id = $1, status = $2, accept_date = $3, start_date = $4, end_date = $5 where ride_id = $6',
-    [ride.driverId, ride.status, ride.acceptDate, ride.startDate, ride.endDate, ride.rideId]);
+    [ride.driverId, ride.status.value, ride.acceptDate, ride.startDate, ride.endDate, ride.rideId]);
   }
 }
