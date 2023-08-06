@@ -9,17 +9,21 @@ import PassengerRepositoryDatabase from "./infra/repository/PassengerRepositoryD
 import PgaAdapter from "./infra/database/PgAdapter";
 import MainController from "./infra/http/MainController";
 import ExpressAdapter from "./infra/http/ExpressAdapter";
+import { RequestRide } from "./application/usecase/RequestRide";
+import RideRepositoryDatabase from "./infra/repository/RideRepositoryDatabase";
 
 // Main composition root
 const connection = new PgaAdapter();
 const passangerRepository = new PassengerRepositoryDatabase(connection);
 const driverRepository = new DriverRepositoryDatabase(connection);
+const rideRepository = new RideRepositoryDatabase(connection);
 
 const calculateRide = new CalculateRide();
 const createPassenger = new CreatePassenger(passangerRepository);
 const getPassenger = new GetPassenger(passangerRepository);
 const createDriver = new CreateDriver(driverRepository);
 const getDriver = new GetDriver(driverRepository);
+const requestRide = new RequestRide(rideRepository)
 const httpServer = new ExpressAdapter();
 
 new MainController(
@@ -28,6 +32,7 @@ new MainController(
 	createPassenger,
 	getPassenger,
 	createDriver,
-	getDriver
+	getDriver,
+	requestRide
 );
 httpServer.listen(3000);
