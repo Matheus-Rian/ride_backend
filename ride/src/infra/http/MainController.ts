@@ -5,6 +5,7 @@ import { CreateDriver } from '../../application/usecase/CreateDriver';
 import { CreatePassenger } from '../../application/usecase/CreatePassenger';
 import { GetDriver } from '../../application/usecase/GetDriver';
 import { GetPassenger } from '../../application/usecase/GetPassenger';
+import { RequestRide } from '../../application/usecase/RequestRide';
 import HttpServer from './HttpServer';
 
 // Interface Adapter
@@ -15,7 +16,8 @@ export default class MainController {
     createPassenger: CreatePassenger,
     getPassenger: GetPassenger,
     createDriver: CreateDriver,
-    getDriver: GetDriver
+    getDriver: GetDriver,
+    requestRide: RequestRide    
   ) {
     httpServer.on('post', '/calculate_ride', async (params: any, body: any) => {
       const output = await calculateRide.execute(body);
@@ -39,6 +41,11 @@ export default class MainController {
     
     httpServer.on('get', '/drivers/:driverId', async (params: any, body: any) => {
       const output = await getDriver.execute({ driverId: params.driverId });
+      return output;
+    });
+
+    httpServer.on('post', '/request_ride', async (params: any, body: any) => {
+      const output = await requestRide.execute(body);
       return output;
     });
   }
