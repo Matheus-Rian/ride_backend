@@ -3,5 +3,5 @@ import { UUID } from "../usecase/models/uuid"
 
 export interface DriverRepository {
   save(driver: Driver): Promise<void>
-  get(driverId: UUID): Promise<Driver>
+  get(driverId: UUID | string): Promise<Driver>
 }
